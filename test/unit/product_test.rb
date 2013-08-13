@@ -40,14 +40,14 @@ class ProductTest < ActiveSupport::TestCase
 		assert new_product(image_name).invalid?, "#{image_name} shouldn't be valid"           
 	end
   end
-  # test "product is not valid without a unique title" do
-  # 	product = Product.new(:title => products(:ruby).title,
-  # 						  :description => "yyy",
-  # 						  :price => 1,
-		# 				  :image_url => "fred.gif")
-  # 	assert !product.save
-  # 	assert_equal "has already been taken", product.errors[:title].join('; ' ) 
-  # end
+  test "product is not valid without a unique title" do
+  	product = Product.new(:title => products(:ruby).title,
+  						  :description => "yyy",
+  						  :price => 1,
+						  :image_url => "fred.gif")
+  	assert !product.save
+  	assert_equal "has already been taken", product.errors[:title].join('; ' ) 
+  end
  	test "product is not valid without a unique title - i18n" do
 		product = Product.new(:title => products(:ruby).title,
 								:description => "yyy" ,
@@ -56,5 +56,34 @@ class ProductTest < ActiveSupport::TestCase
 		assert !product.save
 		assert_equal I18n.translate('activerecord.errors.messages.taken' ),
 		product.errors[:title].join('; ' )
+
+  	end
+  # 	test "product title must be at least ten characters long" do
+		# product = products(:ruby)
+		# assert product.title.length <10?, "length of title should be > 10 chars"
+  # 	end
+  	test "title is at least 10 characters long OPTION 1" do
+    product = Product.new(:price        =>  9.99,
+                          :description  =>  "yyy",
+                          :image_url    =>  "zzz.jpg")
+
+    product.title = "This is an acceptable title" 
+    assert product.valid?
+
+    product.title = "So is this" 
+    assert product.valid?
+
+    product.title = "not this" 
+    assert product.invalid?
+    assert_equal "must be at least 10 characters long.", 
+      product.errors[:title].join('; ')
+  	end
+
+  	test "product title must be at least ten characters long OPTION 2" do
+  		product = products(:ruby)
+  		assert product.valid?, "product title shouldn't be invalid" 
+
+  		product.title = product.title.first(9)
+    	assert product.invalid?, "product title shouldn't be valid"
   	end
 end
