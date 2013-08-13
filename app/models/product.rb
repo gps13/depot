@@ -1,4 +1,8 @@
 class Product < ActiveRecord::Base
+  # We want products in alphabetical order. We add default_scope call to Product model.
+  # Default scopes apply to all queries that start with this model.
+  default_scope :order => 'title'
+
   attr_accessible :description, :image_url, :price, :title
   validates :title, :description, :image_url, :presence => true
   validates :price, :numericality => {:greater_than_or_equal_to => 0.01}
