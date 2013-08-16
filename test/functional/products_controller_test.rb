@@ -54,4 +54,14 @@ class ProductsControllerTest < ActionController::TestCase
 
     assert_redirected_to products_path
   end
+
+  test "should get products" do
+    get :index
+    assert_response :success
+    # assert_select '#columns #side a' , :minimum => 4
+    # assert_select '#main .entry' , 3
+    assert_select '#product_list'
+    assert_select 'h1' , 'Listing products'
+    # assert_select '.price' , /\$[,\d]+\.\d\d/
+  end
 end
