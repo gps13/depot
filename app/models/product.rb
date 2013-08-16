@@ -1,4 +1,5 @@
 class Product < ActiveRecord::Base
+  attr_accessible :image_url, :description, :price, :title
   # We want products in alphabetical order. We add default_scope call to Product model.
   # Default scopes apply to all queries that start with this model.
   default_scope :order => 'title'
@@ -16,10 +17,11 @@ class Product < ActiveRecord::Base
 
   # ensure that there are no line items referencing this product
   def ensure_not_referenced_by_any_line_item
-  	if line_items.count.zero?
-		return true
-	else
-		errors.add(:base, 'Line Items present' )
-	return false
-	end
+    if line_items.count.zero?
+		  return true
+	  else
+		  errors.add(:base, 'Line Items present' )
+	    return false
+	  end
+  end
 end
